@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shard.mapper.OrdersMapper">
+	<insert id="orderInsert">
+	 <!-- SELECT 쿼리의 결과를 객체로 매핑 -->
+    <selectKey keyProperty="deliverAddr" resultType="com.shard.domain.DeliverAddrVO" order="BEFORE">
+        select zipCode, userAddr, detailAddr
+        from deliverAddr
+        where email = #{email} and defaultWhether = 1
+    </selectKey>
+
+    <!-- INSERT 쿼리 -->
+	    insert into orders(totalPrice, email, deliverZipCode, userDeliverAddr, deliverDetailAddr)
+	    values (#{totalPrice}, #{email}, #{deliverAddr.zipCode}, #{deliverAddr.userAddr}, #{deliverAddr.detailAddr})
+    </insert>
+	<insert id="detailOrderInsert">
+		insert into detailorder(itemNum, cnt, size, orderId) values(#{itemNum},#{cnt},#{size},#{orderId})
+	</insert>
+	<select id="getCustomer" resultType="list">
+		select username, phone from customer where email = #{email}
+	</select>
+	<select id="getDetailOrder" resultType="com.shard.domain.DetailOrderVO">
+		select * from detailorder where orderId = #{orderId}
+	</select>
+	<insert id="addDeliverAddr">
+	
+	</insert>
+	<select id="getCoupon" resultType="com.shard.domain.CouponIssuanceVO">
+	
+	</select>
+	<select id="getDiscountRate" resultType="String">
+	
+	</select>
+	<delete id="ordersDelete">
+		delete from orders where 
+	</delete>
+	<delete id="detailOrdersDelete">
+		delete from detailOrder where 
+	</delete>
+</mapper>
